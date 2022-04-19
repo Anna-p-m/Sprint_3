@@ -1,6 +1,6 @@
 // If you have time, you can move this variable "products" to a json file and load the data in this js. It will look more professional
 var products = [
-   {
+    {
         id: 1,
         name: 'cooking oil',
         price: 10.5,
@@ -72,32 +72,77 @@ var cart = [];
 var total = 0;
 
 // Exercise 1
+// 1. Loop for to the array products to get the item to add to cart
+// 2. Add found product to the cartList array
 function buy(id) {
-    // 1. Loop for to the array products to get the item to add to cart
-    // 2. Add found product to the cartList array
+    products.forEach(function (product) {
+        if (product.id === id) {
+            cartList.push(product);
+        }
+    })
 }
 
 // Exercise 2
 function cleanCart() {
-
+    cartList = [];
 }
 
 // Exercise 3
 function calculateTotal() {
     // Calculate total price of the cart using the "cartList" array
+    total = 0
+    cartList.forEach(function (product) {
+        total = total + product.price
+    })
+    
 }
+
 
 // Exercise 4
 function generateCart() {
+    cart = [];
     // Using the "cartlist" array that contains all the items in the shopping cart, 
     // generate the "cart" array that does not contain repeated items, instead each item of this array "cart" shows the quantity of product.
+    cartList.forEach(function (product) {
+
+        // check if product already exists in cart
+        var productFound = cart.find(function (item) {
+            return item.id === product.id
+        })
+
+        if (productFound) {
+            productFound.quantity = productFound.quantity + 1
+            productFound.subtotal = productFound.quantity * productFound.price
+        } 
+        else {
+            cart.push(
+                {
+                    id: product.id,
+                    name: product.name,
+                    price: product.price,
+                    type: product.type,
+                    quantity: 1,
+                    subtotal: product.price,
+                    subtotalWithDiscount: 0,
+                }
+            )
+        }
+    })
+    
 }
 
 // Exercise 5
 function applyPromotionsCart() {
     // Apply promotions to each item in the array "cart"
+    cart.forEach(function (product) {
+        if (product.id === 1 && product.quantity >= 3) {
+            product.subtotalWithDiscount = 10 * product.quantity
+        }
+        if (product.id === 3 && product.quantity >= 10) {
+            product.subtotalWithDiscount = product.subtotal / 3 * 2
+        }
+    })
 }
-
 
 // ** Nivell II **
 
@@ -106,6 +151,33 @@ function addToCart(id) {
     // Refactor previous code in order to simplify it 
     // 1. Loop for to the array products to get the item to add to cart
     // 2. Add found product to the cart array or update its quantity in case it has been added previously.
+    products.forEach(function (product) {
+        if (product.id === id) {
+            // check if product already exists in cart
+            var productFound = cart.find(function (item) {
+                return item.id === product.id
+            })
+
+            if (productFound) {
+                productFound.quantity = productFound.quantity + 1
+                productFound.subtotal = productFound.quantity * productFound.price
+            }
+            else {
+                cart.push(
+                    {
+                        id: product.id,
+                        name: product.name,
+                        price: product.price,
+                        type: product.type,
+                        quantity: 1,
+                        subtotal: product.price,
+                        subtotalWithDiscount: 0,
+                    }
+                )
+            }
+        }
+    })
+    
 }
 
 // Exercise 8
